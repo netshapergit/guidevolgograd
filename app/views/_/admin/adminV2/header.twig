@@ -1,0 +1,81 @@
+<header>
+    <nav class="navbar navbar-default navbar-static-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="{$ url.admin $}">
+                    <img alt="NetShaper" src="/packages/netshaper/admin/images/logo.png" title="NetShaper">
+                </a>
+            </div>
+            <ul class="nav navbar-nav">
+
+                {% for partition in menu %}
+
+                    {% if partition.items is defined %}
+
+                        <li
+                            class="
+                                dropdown
+                                {% if partition.active|default(false) %}
+                                    active
+                                {% endif %}
+                            "
+                        >
+                            <a href="#" class="dropdown-toggle">
+                                {$ partition.label $}
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                {% for item in partition.items %}
+                                    <li
+                                        {% if item.alias == request.segments[1]|default('') %}
+                                            class="active"
+                                        {% endif %}
+                                    >
+                                        <a href="{$ url.admin $}/{$ item.alias $}">
+                                            {$ item.label $}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+
+                    {% else %}
+
+                        <li
+                            {% if partition.alias == request.segments[1]|default('') %}
+                                class="active"
+                            {% endif %}
+                        >
+                            <a href="{$ url.admin $}/{$ partition.alias $}">
+                                {$ partition.label $}
+                            </a>
+                        </li>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </ul>
+            <ul class="nav navbar-nav pull-right">
+                <li>
+                    <a href="{$ url.root $}" target="_blank">
+                        <span class="fa fa-globe"></span>
+                        Сайт
+                    </a>
+                </li>
+                <li>
+                    <a href="/auth/logout/admin">
+                        <span class="fa fa-sign-out"></span>
+                        Выход
+                    </a>
+                </li>
+            </ul>
+            <p class="navbar-text pull-right">
+                <span class="text-info">
+                    <span class="fa fa-user"></span>
+                    {$ user.login $}
+                </span>
+            </p>
+        </div>
+    </nav>
+</header>

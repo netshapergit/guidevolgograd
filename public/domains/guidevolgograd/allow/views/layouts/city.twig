@@ -1,0 +1,75 @@
+{% include 'header' %}
+
+<section class="article">
+	<div class="article-top">
+		<div class="article-top__img">
+			<img src="/site/data/images/large/{$ page.field_image $}">
+		</div>
+		
+	</div>
+	<div class="article-mid">
+		<div class="cont_blog">
+			{% if page.field_coords %}
+			<div class="js-add-to-plan" data-id="{$ page.field_object_id $}" style="border-radius: 20px;background: rgba(0, 0, 0, 0.4);position:absolute;margin-top: -120px;display: flex; gap: 10px; align-items: center;">
+				<button class="rbtn" :disabled="isItemAlreadyInRouteOrPlan" @click.stop="addToPlanById">
+					<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none"><path d="M30.7524 10.2471L25.1869 23.7734L17.2261 15.8126L30.7524 10.2471Z" fill="#DD0A23"/><path d="M10.2476 30.7529L15.8131 17.2266L23.7739 25.1874L10.2476 30.7529Z" fill="black"/><path d="M20.5 1L20.5 6" stroke="#929292" stroke-linecap="round"/><line x1="20.5" y1="35.5" x2="20.5" y2="39.5" stroke="#929292" stroke-linecap="round"/><path d="M39 20.5L34 20.5" stroke="#929292" stroke-linecap="round"/><path d="M6 20.5L1 20.5" stroke="#929292" stroke-linecap="round"/></svg>	
+				</button>
+				<div style="font-size:16px; color:#fff;padding-right:10px;">
+					<template v-if="!isItemAlreadyInRouteOrPlan">
+						Добавить в маршрут
+					</template>
+					<template v-else>
+						Добавлено
+					</template>
+				</div>
+			</div>
+			{% endif %}
+			<h1 class="article__title">{$ page.field_header $}</h1>
+			<div class="article__summary">
+				{$ page.field_summary $}
+			</div>
+			<div class="article__content">
+				{$ page.field_content|raw $}
+			</div>
+			{% if page.field_page_objects %}
+			
+			<div class="article__objects objects-blocks" id="objects-block" data-objects="{$ page.field_page_objects $}">
+				<div class="objects-block" v-for="block in objects">
+					<div class="objects-block__header">
+						<div class="objects-block__title">{{ block.title }}</div>
+						<div class="objects-block__action">
+							<button class="mbtn" @click.stop="setRoute(block.items)">Добавить в маршрут</button>
+						</div>
+					</div>
+					<div class="objects-block__list">
+						<div class="objects-block__day" v-for="day in block.items">
+							<object-card
+								v-for="item in day"
+								:key="item.id"
+								:item="item"
+								:favorites="shared.user?.user_favorites"
+								:my-route-plan-items="myRoutePlanItems"
+								:my-route-items="shared.myRoute.routeItems"
+								@add-item-plan="addItemToMyRoutePlan"
+								@remove-item-plan="removeItemFromMyRoutePlanByID"
+								@show-object-on-map="showOnMap"
+								@add-remove-fav="addRemoveFav"
+							></object-card>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			{% endif %}
+			<div class="article__tags">
+				{% set tags = page.field_tags|split(',') %}
+			    {% for tag in tags %}<a href="{$ page.parent_page.path $}?tags={$ tag|trim $}">#{$ tag|trim $}</a>&nbsp;&nbsp;&nbsp;{% endfor %}
+			</div>
+		</div>
+	</div>
+</section>
+
+{% include 'footer' %}
+{% if page.field_page_objects %}
+<script src="/site/theme/js/objects_block.js" type="module"></script>
+{% endif %}

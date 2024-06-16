@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+ 
+    <head>
+        <title>
+            Sitemap
+        </title>
+    </head>
+    
+    <body >
+        {% for page in pages %}
+            <a href="{$ page.path $}">
+                {% if page.field_header %}
+                    {$ page.field_header $}
+                {% elseif page.title %}
+                    {$ page.title $}
+                {% else %}
+                    {$ page.path $}
+                {% endif %}
+            </a>
+            <br>
+        {% endfor %}
+    </body>
+ 
+</html>

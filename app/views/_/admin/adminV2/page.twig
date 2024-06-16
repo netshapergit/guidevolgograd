@@ -1,0 +1,89 @@
+{#% extends '_.admin.base' %#}
+{% extends '_.root' %}
+
+{% set V = constant('V') %}
+
+{% block title %}
+	Admin | {$ request.domain $} | NetShaper
+{% endblock %}
+
+
+{#
+{% block title %}
+	Admin | {$ request.domain $} | NetShaper
+{% endblock %}
+#}
+
+{% block head %}
+    <link rel="stylesheet" href="/packages/bootstrap-themes/yeti/bootstrap.min.css">
+	<link rel="stylesheet" href="/packages/font-awesome/4.1.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/packages/netshaper/admin/css/base.css?v={$ V $}">
+    <link rel="stylesheet" href="/packages/netshaper/admin/v2/css/style.css?v={$ V $}">
+{% endblock %}
+
+{% block body %}
+
+    {% include '_.admin.adminV2.header' %}
+
+    <div id="app" style="padding-top: 70px;">
+        <div class="container-fluid">
+            <div class="egood-header">
+                <div class="egood-tabs-triggers">
+                {#
+                    <div 
+                        class="egood-tab-trigger" 
+                        :class="{'egood-tab-trigger--active': currentTab == tabIndex}"
+                        @click.stop="setTab(tabIndex)"
+                        v-for="(tab, tabIndex) in tabs"
+                        :key="tabIndex"
+                        >
+                        {{ tab.title }}
+                    </div>
+                #}
+                </div>
+                <div class="egood-header__actions">
+                    <a v-if="page" :href="page.path" class="mbtn btn btn-sm btn-info" target="_blank">Открыть</a>
+                    <button type="button" class="mbtn btn btn-sm btn-danger" @click.stop="deletePage">Удалить</button>
+                    <a href="./" type="button" class="mbtn btn btn-sm btn-warning">К списку</a>
+                    <button :disabled="isLoading" type="button" class="mbtn btn btn-sm btn-success" @click.stop="savePage">Сохранить</button>
+                </div>
+            </div>
+            <div class="av2-page-blocks">
+                <div class="av2-page-block">
+                    <div class="av2-edit-input" :key="item.alias" v-for="item in commonFields">
+                        <label>{{item.name}}</label>
+                        <Component 
+                            :is="'input-' + item.type" 
+                            :item="item"
+                            @input="updateField"
+                            />
+                    </div>
+                </div>
+                <div class="av2-page-block">
+                    <div class="av2-edit-input" :key="item.alias" v-for="item in additionalFields">
+                        <label>{{item.name}}</label>
+                        <Component 
+                            :is="'input-' + item.type" 
+                            :item="item"
+                            @input="updateField"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include '_.admin.adminV2.scripts' %}
+
+    <script src="https://cdn.jsdelivr.net/npm/vue2-dropzone@3.6.0/dist/vue2Dropzone.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/vue2-dropzone@3.6.0/dist/vue2Dropzone.min.css" rel="stylesheet">
+    {#
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue2-editor@2.3.34/dist/vue2-editor.js" type="module"></script>
+    #}
+    <script src="/packages/netshaper/admin/v2/js/page.js" type="module"></script>
+
+{% endblock %}

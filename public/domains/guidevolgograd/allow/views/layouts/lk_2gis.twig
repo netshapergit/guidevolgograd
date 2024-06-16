@@ -1,0 +1,107 @@
+{% include 'header' %}
+
+<div class="lk" data-user="{$ user|json_encode() $}" id="lk">
+	<div class="lk__layout">
+		<div class="lk-content">
+			
+			
+			<div class="citysw">
+				<div class="citysw-trigger" @click.stop="citySwitcherActive = !citySwitcherActive">
+					<template v-if="selectedCity">{{selectedCity.city}}</template>
+					<template v-else>Направления</template>
+				</div>
+				<div class="citysw-content" :class="{'citysw-content--active': citySwitcherActive}">
+					<div class="citysw-list" >
+						<div class="citysw-list__item" :class="{'citysw-list__item--active': !selectedCity}" @click.stop="setSelectedCity(false)">Все города</div>
+						<div class="citysw-list__item" 
+							 :class="{'citysw-list__item--active': selectedCity && selectedCity.id == city.id}" 
+							 @click.stop="setSelectedCity(city)" 
+							 v-for="city in shared.cities"
+							 :key="city.id">{{city.city}}</div>
+					</div>
+				</div>
+			</div>
+			
+			
+			<div class="citysw" v-if="selectedCity">
+				<div class="citysw-trigger" @click.stop="tplSwitcherActive = !tplSwitcherActive">
+					<template v-if="selectedTemplate">{{selectedTemplate.field_header}}</template>
+					<template v-else>Категория</template>
+				</div>
+				<div class="citysw-content" :class="{'citysw-content--active': tplSwitcherActive}">
+					<div class="citysw-list">
+						<div class="citysw-list__item" :class="{'citysw-list__item--active': !selectedTemplate}" @click.stop="selectedTemplate = null">Все категории</div>
+						<div class="citysw-list__item" 
+							 :class="{'citysw-list__item--active': selectedTemplate && selectedTemplate.id == tpl.id}" 
+							 @click.stop="selectedTemplate = tpl; tplSwitcherActive = false" 
+							 v-for="tpl in selectedCity.cat" 
+							 :key="tpl.id">{{tpl.field_header}}</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="citysw" v-if="selectedTemplate">
+				<div class="citysw-trigger" @click.stop="layoutSwitcherActive = !layoutSwitcherActive">
+					<template v-if="selectedLayout">{{selectedLayout.name}}</template>
+					<template v-else>Шаблон</template>
+				</div>
+				<div class="citysw-content" :class="{'citysw-content--active': layoutSwitcherActive}">
+					<div class="citysw-list">
+						<div class="citysw-list__item" :class="{'citysw-list__item--active': !selectedLayout}" @click.stop="selectedLayout = null">Все категории</div>
+						<div class="citysw-list__item" 
+							 :class="{'citysw-list__item--active': selectedLayout && selectedLayout.id == tpl.id}" 
+							 @click.stop="selectedLayout = tpl; layoutSwitcherActive = false" 
+							 v-for="tpl in TEMPLATES" 
+							 :key="tpl.id">{{tpl.name}}</div>
+					</div>
+				</div>
+			</div>
+			
+			<input type="text" v-model="searchQuery">
+			<button @click.stop="fetchData">search</button>
+			{{totalItems}} :: {{pagesLength}} :: {{pagination.current_page}} ::
+			
+			<button @click.stop="selectAll">Выбрать все</button>
+			<button @click.stop="create" :disabled="!selectedItems.length">Создать из выбранных</button>
+			<hr>
+			<div class="pagi" v-if="pagination">
+				<button 
+					v-for="pageNumber in pagesLength" 
+					:disabled="pageNumber == pagination.current_page" 
+					:key="pageNumber" 
+					@click.stop="setPage(pageNumber)"
+					>
+					{{ pageNumber }}
+				</button>
+			</div>
+			<div v-if="lastCreatingResults" style="margin: 30px 0;background: #f5f5f5;padding: 10px;">
+				<div v-for="item in lastCreatingResults">
+					<template v-if="item.error">
+						<span style="color: red;">
+							{{item.error.message}}
+						</span>
+					</template>
+					<template v-else>
+						{{item.field_2gis_id}}: Страница создана
+					</template>
+				</div>
+			</div>
+			<div class="" style="min-height: 70vh;">
+				<div v-for="item in items">
+					{{item.full_address_name}}<br>
+					{{item.name}}<br>
+					{{item.id}}<br>
+					{{item.point}}<br>
+					<input type="checkbox" name="select-item" :id="item.id" :value="item" v-model="selectedItems">
+					<label :for="item.id">Выбрать</label>
+					<button @click.stop="create($event, item)">create</button>
+					<hr>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% include 'footer' %}
+<script src="/site/theme/js/lib_translit.js" type="module"></script>
+<script src="/site/theme/js/lk_2gis.js" type="module"></script>

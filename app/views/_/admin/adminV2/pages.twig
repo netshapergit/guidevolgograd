@@ -1,0 +1,54 @@
+{#% extends '_.admin.base' %#}
+{#% extends '_.root' %#}
+
+
+
+{% set V = constant('V') %}
+{#
+{% block title %}
+	Admin | {$ request.domain $} | NetShaper
+{% endblock %}
+#}
+
+{% block head %}
+    <link rel="stylesheet" href="/packages/bootstrap-themes/yeti/bootstrap.min.css">
+	<link rel="stylesheet" href="/packages/font-awesome/4.1.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/packages/netshaper/admin/css/base.css?v={$ V $}">
+    <link rel="stylesheet" href="/packages/netshaper/admin/v2/css/style.css?v={$ V $}">
+{% endblock %}
+
+{% block content %}
+
+    {% include '_.admin.adminV2.header' %}
+
+    <div id="app" style="padding-top: 70px;">
+        <div class="container">
+            <div class="av2-pages-search">
+                <input type="text" class="form-control" @input="onSearchInputChange" placeholder="Поиск по названию, id, alias">
+                <select class="form-control" v-model="queryParams.layout">
+                    <option value="">Все</option>
+                    <option 
+                        v-for="layout in sortedLayouts"
+                        :key="layout.id"
+                        :value="layout.id"
+                    >{{ layout.name }}</option>
+                </select>
+                <a href="/admin/pages-list/new" class="btn btn-success">Создать</a>
+            </div>
+            
+            <div class="av2-pages-list">
+                <pages-tree
+                    v-for="item in pages"
+                    :key="item.id"
+                    :item="item"
+                    @remove-page="deletePage"
+                ></pages-tree>
+                <button class="btn btn-xs btn-primary btn-block" v-if="this.pagination && this.pagination.current_page < this.pagination.last_page" @click.stop="fetchPages">Загрузить еще</button>
+            </div>
+        </div>
+    </div>
+
+    {% include '_.admin.adminV2.scripts' %}
+    <script src="/packages/netshaper/admin/v2/js/pages.js" type="module"></script>
+
+{% endblock %}

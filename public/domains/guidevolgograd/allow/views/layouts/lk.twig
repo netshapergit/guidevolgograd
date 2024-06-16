@@ -1,0 +1,132 @@
+{% include 'header' %}
+
+<div class="lk" data-user="{$ user|json_encode() $}" id="lk">
+	<div class="lk__layout">
+		<div class="lk-content">
+			{#
+			<div class="lk-content-header">
+				<div class="lk-content-header__block">
+					<h1>Персональные данные</h1>
+				</div>
+				<div class="divider"></div>
+				<div class="lk-content-header__block">
+					<div class="lk-content-actions">
+						<button class="mbtn mbtn--color-orange" @click.stop="onSaveChangesButtonClick">Сохранить</button>
+					</div>
+				</div>
+			</div>
+			#}
+			<div class="page-edit">
+				<div class="lk-user">
+					<div class="page-edit-block page-edit-block--ava">
+						<div class="page-edit__ava">
+							<div class="lk-ava" @click.stop="onAddFileClick('page-edit-image')">
+								<img :src="'/site/data/images/large/' + user.field_image">
+								<div class="lk-info__avatar-change">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g data-name="Layer 2"><path d="M19.4 7.34 16.66 4.6A2 2 0 0 0 14 4.53l-9 9a2 2 0 0 0-.57 1.21L4 18.91a1 1 0 0 0 .29.8A1 1 0 0 0 5 20h.09l4.17-.38a2 2 0 0 0 1.21-.57l9-9a1.92 1.92 0 0 0-.07-2.71zM9.08 17.62l-3 .28.27-3L12 9.32l2.7 2.7zM16 10.68 13.32 8l1.95-2L18 8.73z" data-name="edit"/></g></svg>
+								</div>
+							</div>
+							<input type="file" class="hidden" ref="page-edit-image" id="page-edit-image" @change.stop="onImageUpload($event)">
+						</div>
+					</div>
+					<div class="page-edit-block">
+						<div class="page-edit-block__title">
+							Мои данные
+						</div>
+					</div>
+					<div class="page-edit-blocks">
+						<div class="page-edit-block">
+							<div class="page-edit-input">
+								<input class="q-input" type="text" v-model="user.field_first_name" placeholder="Имя">
+							</div>
+						</div>
+						<div class="page-edit-block">
+							<div class="page-edit-input">
+								<input class="q-input" type="text" v-model="user.field_last_name" placeholder="Фамилия">
+							</div>
+						</div>
+						<div class="page-edit-block">
+							<div class="page-edit-input">
+								<div class="q-input">Логин: {{user.login}}</div>
+							</div>
+						</div>
+						<div class="page-edit-block">
+							<div class="page-edit-input">
+								<div class="q-input">E-mail: {{user.email}}</div>
+							</div>
+						</div>
+						<div class="page-edit-block">
+							<div class="page-edit-input">
+								<input class="q-input" type="text" v-model="user.field_phone" placeholder="Телефон">
+							</div>
+						</div>
+						<div class="page-edit-block">
+							<div class="page-edit-input">
+								<input class="q-input" type="text" v-model="user.field_telegram" placeholder="Telegram">
+							</div>
+						</div>
+						<div class="page-edit-block">
+							<div class="page-edit-block__title" style="font-size:14px;">
+								Особенности <br>и интересы
+							</div>
+						</div>
+						<Br> 
+ 						<ul>
+							<li>"ЗРЕНИЕ" - для лиц с нарушениями зрения</li> 
+							<li>"СЛУХ" - для лиц с нарушениями слуха</li> 
+							<li>"КОЛЯСКА" - для передвигающихся на креслах-колясках</li> 
+							<li>"МАЛОМОБИЛЬНЫЙ" - c нарушениями опорно-двигательного аппарата</li>
+							<li>"КОСМОС" - любая тема которая вам интересна</li>
+							<li>"ИСТОРИЯ" - любая тема которая вам интересна</li>
+						</ul>
+						<div class="page-edit-block">
+							<div class="page-edit-input">
+								<input class="q-input" type="text" v-model="user.field_prefs" placeholder="Интересы">
+							</div>
+						</div>
+					</div>
+					<br>
+					<div class="page-edit-block" v-if="!isPasswordChangeFieldsShowed">
+						<button class="rbtn rbtn--text rbtn--full" @click.stop="isPasswordChangeFieldsShowed = !isPasswordChangeFieldsShowed">Сменить пароль</button>
+					</div>
+					<template v-else>
+						<div class="page-edit-block">
+							<div class="page-edit-input">
+								<input class="q-input" type="password" v-model="user.password" placeholder="Новый пароль">
+							</div>
+						</div>
+						<div class="page-edit-block">
+							<div class="page-edit-input">
+								<input class="q-input" type="password" v-model="user.password_confirmation" placeholder="Подтверждение пароля">
+							</div>
+						</div>
+					</template>
+					<br>
+					<div class="page-edit-block">
+						<button class="rbtn rbtn--text rbtn--color-pink rbtn--full" :class="{'rbtn--tpa': !isUserDataChanged}" @click.stop="onSaveChangesButtonClick">Сохранить</button>
+					</div>
+				</div>
+			</div>
+			
+			<form data-action="/user/users/{$ user.id $}" class="js-user-edit-form hidden" ref="js-opage-form" autocomplete="off" @submit.prevent="saveChanges"> 
+				<input name="_method" type="hidden" value="put">
+				
+				<input class="form-control" autocomplete="false" id="password" name="password" placeholder="Пароль" type="password" :value="user.password">
+				<input class="form-control" autocomplete="false" id="password_confirmation" name="password_confirmation" placeholder="Подтверждение" type="password" :value="user.password_confirmation">
+				<input name="login" autocomplete="false" type="text" :value="user.login">
+				<input name="email" autocomplete="false" type="email" :value="user.email">
+				<input name="field_first_name" autocomplete="false" type="text" :value="user.field_first_name">
+				<input name="field_last_name" autocomplete="false" type="text" :value="user.field_last_name">
+				<input name="field_phone" autocomplete="false" type="text" :value="user.field_phone">
+				<input name="field_telegram" autocomplete="false" type="text" :value="user.field_telegram">
+				<input name="field_prefs" autocomplete="false" type="text" :value="user.field_prefs">
+				<input name="field_image" autocomplete="false" type="text" :value="user.field_image">
+				
+				<button type="submit" class="mbtn js-up-user-save" ref="save-changes-form-button">Сохранить</button>
+			</form>
+		</div>
+	</div>
+</div>
+
+{% include 'footer' %}
+<script src="/site/theme/js/lk_personal.js" type="module"></script>

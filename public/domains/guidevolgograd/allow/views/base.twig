@@ -1,0 +1,151 @@
+{% extends '_.new' %}
+
+{% block title %}
+	{% if request.path == '/' %}
+		{% include 'domain_msgs' with {field: 'title'} %}
+	{% else %}
+	 	{$ parent() $} 🚕
+		{% if site.field_name %}
+			| {$ site.field_name $}
+		{% endif %}
+	{% endif %}
+{% endblock %}
+
+{% block head %}
+	{$ parent() $}
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+
+	<link rel="manifest" href="/manifest.json">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="application-name" content="RussPass4u">
+	<meta name="apple-mobile-web-app-title" content="RussPass4u">
+	<meta name="theme-color" content="#f91942">
+	<meta name="msapplication-navbutton-color" content="#f91942">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="msapplication-starturl" content="/">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<link rel="icon" sizes="512x512" href="/site/theme/images/russpass_logo.png">
+	<link rel="apple-touch-icon" sizes="192x192" href="/site/theme/images/russpass_logo.png">
+	<link rel="icon" href="/site/theme/images/russpass_logo_192.png">
+	<link rel="apple-touch-icon" href="/site/theme/images/guideplace_logo_192.png">
+
+
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/css/splide.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue-slider-component@3.1.4/theme/default.css">
+	<link rel="stylesheet" href="/site/theme/css/base.css">
+	
+	<script src="/site/theme/js/vue.js"></script>
+	<script src="/site/theme/js/store.js" type="module"></script>
+	<meta name="page_id" content="{$ page.id $}">
+	<meta name="layout_id" content="{$ page.layout_id $}">
+<style>
+.sbar {
+			position: fixed;
+			left: 0;
+			top: 0;
+			z-index: 9;
+			background: var(--text);
+			padding: 115px 25px 45px;
+			height: 100vh;
+			min-width: 85px;
+			transition: .3s;
+		}
+		
+		.sbar.hovered {
+			width: unset;
+		}
+		
+		.sbar-menu__list {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+			text-align: center;
+		}
+		
+		.sbar-menu__item:not(:last-child) {
+			margin-bottom: 20px;
+		}
+		
+		.sbar-menu__link {
+			display: flex;
+			align-items: center;
+			color: #fff;
+			font-size: 12px;
+			line-height: 14px;
+		}
+	
+	.sbar-menu__link svg path {
+		fill: rgb(204, 204, 204);
+	}
+		
+		.sbar-menu__link-icon {
+			flex: 0 0 35px;
+		}
+		
+		.sbar.hovered .sbar-menu__link-icon {
+			padding-right: 10px;
+			flex: 0 0 45px;
+		}
+		
+		.sbar-menu__link-title {
+			display: none;
+			font-size: 14px;
+		}
+		li.sbar-menu__item:hover .sbar-menu__link-title {
+			border-bottom: 1px dashed #fff;
+			color:#fff;
+		}
+		li.sbar-menu__item:hover path {fill:#fff; transition: .3s;} 
+		
+		.sbar.hovered .sbar-menu__link-title {
+			display: block
+		}
+	
+	.sbar-search {
+		margin-bottom: 50px;
+	}
+	
+	.sbar-search__btn {
+		display: inline-block;
+		text-align: center;
+		width: 35px;
+		text-align: center;
+	}
+	
+	.sbar-search__btn svg * {
+		fill: rgb(204, 204, 204);
+		transition: .3s;
+	}
+	
+	.sbar-search__btn:hover svg * {
+		fill: #fff;
+	}
+		
+</style>
+<link id="page_favicon" href="/site/theme/images/favicon.ico" rel="icon" type="image/x-icon">
+
+ <!--script type="application/javascript">
+      window.tiledeskSettings= 
+      {
+          projectid: "64aec9f6b8d5f000130a9d27"
+      };
+      (function(d, s, id) { 
+          var w=window; var d=document; var i=function(){i.c(arguments);};
+          i.q=[]; i.c=function(args){i.q.push(args);}; w.Tiledesk=i;                    
+          var js, fjs=d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js=d.createElement(s); 
+          js.id=id; js.async=true; js.src="https://widget.tiledesk.com/v6/launch.js";
+          fjs.parentNode.insertBefore(js, fjs);
+      }(document,'script','tiledesk-jssdk'));
+  </script-->
+		
+<!--script type="text/javascript">!function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src='https://vk.com/js/api/openapi.js?169',t.onload=function(){VK.Retargeting.Init("VK-RTRG-1816776-uQ7d"),VK.Retargeting.Hit()},document.head.appendChild(t)}();</script><noscript><img src="https://vk.com/rtrg?p=VK-RTRG-1816776-uQ7d" style="position:fixed; left:-999px;" alt=""/></noscript-->
+
+{% endblock %}
+
